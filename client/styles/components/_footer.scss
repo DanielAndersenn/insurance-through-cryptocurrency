@@ -1,0 +1,19 @@
+.footer {
+    background: $off-black;
+    color: white;
+    text-align: center;
+    vertical-align: bottom;
+    margin-top: 20rem;
+    position: fixed;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    height: 100%;
+}
+
+.link {
+    font-size: $m-size;
+    text-align: center;
+    margin-top: 1.5rem;
+    color:white
+}

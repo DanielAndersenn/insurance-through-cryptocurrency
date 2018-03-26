@@ -9,7 +9,7 @@ class InfoFormHeader extends React.Component {
             <thead>
             <tr>
             <th className="info-form-header-table-text">User Info</th>
-            <th className="info-form-header-table-text">System Info</th>
+            <th className="info-form-header-table-text">PC Info</th>
             </tr>
             </thead>
             </table>

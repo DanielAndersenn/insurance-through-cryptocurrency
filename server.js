@@ -49,15 +49,22 @@ app.post('/customer', (req, res) => {
 app.post('/policy', (req, res) => {
   winston.log('info', '/policy endpoint Started');
 
+  winston.log('info', 'Value of req.body.selfBuilt: ' + req.body.selfBuilt);
+  winston.log('info', 'Value of req.body.individualParts: ' + req.body.individualParts);
+
   var date = new Date().toJSON();
   var pcTypeCode = (req.body.type === "Desktop") ? '1': '2';
   var cost = Number(req.body.cost);
-  //var selfBuilt = (req.body.selfBuilt);
+  var selfBuilt = (req.body.selfBuilt === "on") ? true: false;
+  var individualParts = (req.body.individualParts === "on") ? true: false;
+  var pcSerial = req.body.pcSerial;
+  
 
-  winston.log('Value of req.body.selfBuilt: ' + req.body.selfBuilt);
-  winston.log('Value of req.body.type: ' + req.body.type);
-  winston.log('Value of req.body.cost: ' + req.body.cost);
-  winston.log('Value of req.body.customerSerial: ' + req.body.customerSerial);
+  winston.log('info', 'Value of req.body.type: ' + req.body.type);
+  winston.log('info', 'Value of req.body.cost: ' + req.body.cost);
+  winston.log('info', 'Value of req.body.customerSerial: ' + req.body.customerSerial);
+  winston.log('info', 'Value of selfBuilt: ' + selfBuilt);
+  winston.log('info', 'Value of individualParts: ' + individualParts);
 
   //Grab relevant parameters from body of request
   var policy = new Policy({  
@@ -70,13 +77,13 @@ app.post('/policy', (req, res) => {
     payer: {serial: req.body.customerSerial},
     whiteLabel: {serial: '1641010000000002'},
     policyContractPeriod: {enumName: 'POLICY_CONTRACT_PERIOD', code: '12'},
-    policyParameterValues: [{name: 'PC_SERIAL', type: 'STRING', value: 'TEST_SERIAL'},
-                            {name: 'INDIVIDUAL_PARTS_COVER', type: 'BOOLEAN', value: true},
+    policyParameterValues: [{name: 'PC_SERIAL', type: 'STRING', value: pcSerial},
+                            {name: 'INDIVIDUAL_PARTS_COVER', type: 'BOOLEAN', value: individualParts},
                             {name: 'DATE_OF_PURCHASE', type: 'DATE', value: date},
                             {name: 'COST', type: 'DOUBLE', value: cost},
                             {name: 'MODEL', type: 'STRING', value: req.body.model},
                             {name: 'TYPE', type: 'ID', enumName: 'PC_TYPE', code: pcTypeCode},
-                            {name: 'SELFBUILT', type: 'BOOLEAN', value: true}]
+                            {name: 'SELFBUILT', type: 'BOOLEAN', value: selfBuilt}]
   });
 
   var result = ibsuite.createPolicy(policy);
@@ -94,7 +101,39 @@ app.post('/policy', (req, res) => {
 
 app.put('/calculatePolicy', (req, res) => {
 
-  var result = ibsuite.calculatePolicy(req.body.policySerial);
+  winston.log('info', '/calculatePolicy endpoint Started');
+
+  winston.log('info', 'Value of req.body.selfBuilt: ' + req.body.selfBuilt);
+  winston.log('info', 'Value of req.body.individualParts: ' + req.body.individualParts);
+
+  var date = new Date().toJSON();
+  var pcTypeCode = (req.body.type === "Desktop") ? '1': '2';
+  var cost = Number(req.body.cost);
+  var selfBuilt = (req.body.selfBuilt === "on") ? true: false;
+  var individualParts = (req.body.individualParts === "on") ? true: false;
+  var pcSerial = req.body.pcSerial;
+
+  winston.log('info', 'Value of req.body.type: ' + req.body.type);
+  winston.log('info', 'Value of req.body.cost: ' + req.body.cost);
+  winston.log('info', 'Value of req.body.customerSerial: ' + req.body.customerSerial);
+  winston.log('info', 'Value of selfBuilt: ' + selfBuilt);
+  winston.log('info', 'Value of individualParts: ' + individualParts);
+
+  //Grab updated policy params from request body
+  var newPolicyParams = {params: {policyParameterValues: [
+                        {name: 'PC_SERIAL', type: 'STRING', value: pcSerial},
+                        {name: 'INDIVIDUAL_PARTS_COVER', type: 'BOOLEAN', value: individualParts},
+                        {name: 'DATE_OF_PURCHASE', type: 'DATE', value: date},
+                        {name: 'COST', type: 'DOUBLE', value: cost},
+                        {name: 'MODEL', type: 'STRING', value: req.body.model},
+                        {name: 'TYPE', type: 'ID', enumName: 'PC_TYPE', code: pcTypeCode},
+                        {name: 'SELFBUILT', type: 'BOOLEAN', value: selfBuilt}
+                        ]}
+                        };
+
+  
+
+  var result = ibsuite.calculatePolicy(req.body.policySerial, newPolicyParams);
 
   result.then((result) => {
     winston.log('info', 'Received success response from IBSuite');

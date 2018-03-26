@@ -78,18 +78,19 @@ var createPolicy = (policy) => {
   });
 }
 
-var calculatePolicy = (polSerial) => {
+var calculatePolicy = (polSerial, policyParams) => {
   return new Promise((resolve, reject) => {
 
   winston.log('info', 'begin calculatePolicy');
 
   winston.log('info', 'Value of polSerial: ' + polSerial);
+  winston.log('info', 'Value of policyParams: ' + JSON.stringify(policyParams));
 
   request({
     headers: generateAuthHeader(),
     url: 'https://101danand.ibapps.dk/101danand/rest/v1/policies/' + polSerial + '?event=calculate&invoke=2',
     method: 'PUT',
-    body: '{}'
+    body: JSON.stringify(policyParams)
   }, (error, response, body) => {
       winston.log('info', 'Value of error: ' + error);
       winston.log('info', 'Value of response: ' + response);

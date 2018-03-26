@@ -62,7 +62,7 @@ export default class InfoForm extends React.Component {
             </tr>
             </tbody>
             </table>
-            <div className="">Price: {this.props.ethPrice}</div>
+            <div className="price-div">Price: {this.props.ethPrice} ETH</div>
             <button className="calc-button">Calculate</button>
             <button className="buy-button">Buy</button>
             </form>
