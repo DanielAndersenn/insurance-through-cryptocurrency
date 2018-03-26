@@ -1,0 +1,10 @@
+.form-text-input {
+    margin: 0 0 0 2rem;
+    background: lighten($dark-blue, 10%);
+    height: .3rem;
+    border: none;
+    flex-grow: 1;
+    color: $off-white;
+    margin-right: $s-size;
+    padding: $s-size;
+}

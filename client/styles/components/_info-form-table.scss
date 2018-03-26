@@ -1,0 +1,75 @@
+.info-form-table {
+    color: white;
+    width: 100%;
+    margin: 0 0 0 0;
+    border-spacing: 30px 4rem;
+
+}
+
+.info-table-body {
+    width: 25%;
+    font-size: $m-size;
+}
+
+.info-form-table label{
+    display: block;
+    margin: 0px 0px 0px 0px;
+}
+.info-form-table label > span{
+    width: 75px;
+    float: left;
+    padding-top: 8px;
+    padding-right: 5px;
+}
+
+.input-field-cost {
+    font-size: 1.3rem;
+    height: 3rem;
+    width: 23rem;
+    box-sizing: content-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    border: none;
+    border-radius: 700px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    padding: 7px;
+    outline: none;
+    background: lighten($dark-blue, 10);
+    color: white;
+    font-weight: 0;
+}
+
+.input-field-checkbox {
+    margin: 0px 0px 0px 30px;
+    width: 20px;
+    height: 20px;
+    vertical-align: bottom
+}
+
+.info-form-table input.input-field,
+.info-form-table .select-field{
+    font-size: 1.3rem;
+    height: 3rem;
+    width: 25rem;
+    box-sizing: content-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    border: none;
+    border-radius: 700px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    padding: 7px;
+    outline: none;
+    background: lighten($dark-blue, 10);
+    color: white;
+    font-weight: 0;
+}
+
+.info-form-table .input-field:focus {
+    border: 1px solid white;
+}
+
+.coverage-header {
+    font-size: $m-size;
+}

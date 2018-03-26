@@ -1,0 +1,13 @@
+.header {
+    background: $off-black;
+    color: white;
+    margin-bottom: $m-size;
+    padding: $m-size 0 0 0;
+    font-size: $xl-size;
+}
+
+th {
+    width: 50%;
+    text-align: left;
+    font-size: $info-header-size;
+}
