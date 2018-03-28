@@ -19,7 +19,7 @@ class MessageModal extends React.Component {
             {this.props.messages && this.props.messages.map((message, index) => {
                 return <div key={index}>{message}</div>
             })}
-            <button className="button-small" onClick={this.props.handleMessageClear}>Close</button>
+            <button className="button-small" onClick={this.props.handleMessageClear}>Ok</button>
         </Modal>
     )
     }

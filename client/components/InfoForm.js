@@ -19,13 +19,6 @@ export default class InfoForm extends React.Component {
         const individualParts = event.target.elements.individualParts.checked;
         const selfBuilt = event.target.elements.selfBuilt.checked;
 
-        console.log('Value of type: ' + type);
-        console.log('Value of cost: ' + cost);
-        console.log('Value of model: ' + model);
-        console.log('Value of pcSerial: ' + pcSerial);
-        console.log('Value of individualParts: ' + individualParts);
-        console.log('Value of selfBuilt: ' + selfBuilt);
-
         //Call up the chain to start calculate event
         this.props.handleCalculate(name, address, cpr, email, type, cost, model, pcSerial, individualParts, selfBuilt);
 
