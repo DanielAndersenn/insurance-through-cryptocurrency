@@ -1,8 +1,8 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\Daniel Andersen\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js run build
+  C:\Program Files\nodejs\node.exe C:\Users\Daniel Andersen\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js install react-router-dom@4.2.2
 
 PATH: 
-  C:\Users\Daniel Andersen\Desktop\React\insurance-through-cryptocurrency\node_modules\.bin;C:\Users\Daniel Andersen\AppData\Local\Yarn\Data\link\node_modules\.bin;C:\Users\Daniel Andersen\Desktop\React\insurance-through-cryptocurrency\node_modules\.bin;C:\Users\Daniel Andersen\AppData\Local\Yarn\Data\link\node_modules\.bin;C:\Program Files\libexec\lib\node_modules\npm\bin\node-gyp-bin;C:\Program Files\lib\node_modules\npm\bin\node-gyp-bin;C:\Program Files\nodejs\node_modules\npm\bin\node-gyp-bin;C:\Users\Daniel Andersen\Desktop\React\insurance-through-cryptocurrency\node_modules\.bin;C:\Users\Daniel Andersen\AppData\Local\Yarn\Data\link\node_modules\.bin;C:\Users\Daniel Andersen\Desktop\React\insurance-through-cryptocurrency\node_modules\.bin;C:\Users\Daniel Andersen\AppData\Local\Yarn\Data\link\node_modules\.bin;C:\Users\Daniel Andersen\AppData\Local\Yarn\bin;C:\Program Files\libexec\lib\node_modules\npm\bin\node-gyp-bin;C:\Program Files\lib\node_modules\npm\bin\node-gyp-bin;C:\Program Files\nodejs\node_modules\npm\bin\node-gyp-bin;%SystemRoot%\system32\WindowsPowerShell\v1.0\;C:\ProgramData\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Microsoft Network Monitor 3\;C:\Program Files (x86)\Livestreamer;C:\Program Files (x86)\Streamlink\bin;C:\Program Files\PuTTY\;C:\Android;C:\Program Files (x86)\Skype\Phone\;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\Users\Daniel Andersen\AppData\Roaming\npm;C:\Users\Daniel Andersen\AppData\Local\atom\bin;C:\Program Files\Heroku\bin;C:\Program Files\Microsoft VS Code\bin
+  %SystemRoot%\system32\WindowsPowerShell\v1.0\;C:\ProgramData\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Microsoft Network Monitor 3\;C:\Program Files (x86)\Livestreamer;C:\Program Files (x86)\Streamlink\bin;C:\Program Files\PuTTY\;C:\Android;C:\Program Files (x86)\Skype\Phone\;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\Users\Daniel Andersen\AppData\Roaming\npm;C:\Users\Daniel Andersen\AppData\Local\atom\bin;C:\Program Files\Heroku\bin;C:\Program Files\Microsoft VS Code\bin
 
 Yarn version: 
   1.5.1
@@ -22,7 +22,7 @@ npm manifest:
     "license": "MIT",
     "scripts": {
       "serve": "live-server public/",
-      "build": "webpack",
+      "build": "webpack --watch",
       "dev-server": "webpack-dev-server"
     },
     "dependencies": {
@@ -5330,16 +5330,10 @@ Lockfile:
       window-size "0.1.0"
 
 Trace: 
-  Error: Command failed.
-  Exit code: 2
-  Command: C:\Windows\system32\cmd.exe
-  Arguments: /d /s /c webpack
-  Directory: C:\Users\Daniel Andersen\Desktop\React\insurance-through-cryptocurrency\client
-  Output:
-  
-      at ProcessTermError.MessageError (C:\Users\Daniel Andersen\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:186:110)
-      at new ProcessTermError (C:\Users\Daniel Andersen\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:226:113)
-      at ChildProcess.<anonymous> (C:\Users\Daniel Andersen\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:30281:17)
-      at ChildProcess.emit (events.js:160:13)
-      at maybeClose (internal/child_process.js:943:16)
-      at Process.ChildProcess._handle.onexit (internal/child_process.js:220:5)
+  Error: `install` has been replaced with `add` to add new dependencies. Run "yarn add react-router-dom@4.2.2" instead.
+      at new MessageError (C:\Users\Daniel Andersen\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:186:110)
+      at Object.<anonymous> (C:\Users\Daniel Andersen\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:21987:13)
+      at Generator.next (<anonymous>)
+      at step (C:\Users\Daniel Andersen\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:98:30)
+      at C:\Users\Daniel Andersen\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:109:13
+      at <anonymous>

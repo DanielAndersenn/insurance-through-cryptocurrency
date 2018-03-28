@@ -2,9 +2,9 @@ import React from 'react';
 
 const Footer = () => (
     <div className="footer">
-        <p>Test</p>
+        <a href='/help' target="_blank" className="link">How to</a>
         <p>Copyright @ Daniel Andersen</p>
-        <a href="https://github.com/DanielAndersenn/insurance-through-cryptocurrency" className="link">GitHub</a>
+        <a href="https://github.com/DanielAndersenn/insurance-through-cryptocurrency" target="_blank" className="link">GitHub</a>
     </div>
 )
 

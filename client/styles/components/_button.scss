@@ -23,3 +23,16 @@
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
 }
+
+.button-small {
+    margin: 20px 0px 0px 0px;
+    width: 20rem;
+    border: none;
+    font-size: $l-size;
+    padding: 7px 13px 8px 13px;
+    background: $off-black;
+    color: #fff;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+}

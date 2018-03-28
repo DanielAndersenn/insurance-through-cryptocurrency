@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const winston = require('winston');
 const ibsuite = require('./interfaces/ibsuite');
 const path = require('path');
+const publicPath = path.join(__dirname, 'client', 'public');
 
 var {Customer} = require('./models/iba_customer_model');
 var {Policy} = require('./models/iba_policy_model');
@@ -13,11 +14,11 @@ var {Policy} = require('./models/iba_policy_model');
 var app = express();
 const port = process.env.PORT;
 
-app.use('/', express.static(`${__dirname}/client/public`));
+app.use('/', express.static(publicPath));
 app.use(bodyParser.json());
 
 app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '/client/public', 'index.html'));
+    res.sendFile(path.join(publicPath, 'index.html'));
   });
 
 app.post('/customer', (req, res) => {
@@ -55,8 +56,8 @@ app.post('/policy', (req, res) => {
   var date = new Date().toJSON();
   var pcTypeCode = (req.body.type === "Desktop") ? '1': '2';
   var cost = Number(req.body.cost);
-  var selfBuilt = (req.body.selfBuilt === "on") ? true: false;
-  var individualParts = (req.body.individualParts === "on") ? true: false;
+  var selfBuilt = req.body.selfBuilt;
+  var individualParts = req.body.individualParts;
   var pcSerial = req.body.pcSerial;
   
 
@@ -103,31 +104,29 @@ app.put('/calculatePolicy', (req, res) => {
 
   winston.log('info', '/calculatePolicy endpoint Started');
 
-  winston.log('info', 'Value of req.body.selfBuilt: ' + req.body.selfBuilt);
-  winston.log('info', 'Value of req.body.individualParts: ' + req.body.individualParts);
+  winston.log('info', 'Value of req.body.policySerial: ' + req.body.policySerial);
+  winston.log('info', 'Value of req.body.policyParams: ' + req.body.policyParams);
+
+  var ppSerial = req.body.policyParams;
+
+  winston.log('info', 'Value of ppSerial[2].serial: ' + ppSerial[2].serial);
 
   var date = new Date().toJSON();
   var pcTypeCode = (req.body.type === "Desktop") ? '1': '2';
   var cost = Number(req.body.cost);
-  var selfBuilt = (req.body.selfBuilt === "on") ? true: false;
-  var individualParts = (req.body.individualParts === "on") ? true: false;
+  var selfBuilt = req.body.selfBuilt;
+  var individualParts = req.body.individualParts;
   var pcSerial = req.body.pcSerial;
 
-  winston.log('info', 'Value of req.body.type: ' + req.body.type);
-  winston.log('info', 'Value of req.body.cost: ' + req.body.cost);
-  winston.log('info', 'Value of req.body.customerSerial: ' + req.body.customerSerial);
-  winston.log('info', 'Value of selfBuilt: ' + selfBuilt);
-  winston.log('info', 'Value of individualParts: ' + individualParts);
-
-  //Grab updated policy params from request body
-  var newPolicyParams = {params: {policyParameterValues: [
-                        {name: 'PC_SERIAL', type: 'STRING', value: pcSerial},
-                        {name: 'INDIVIDUAL_PARTS_COVER', type: 'BOOLEAN', value: individualParts},
-                        {name: 'DATE_OF_PURCHASE', type: 'DATE', value: date},
-                        {name: 'COST', type: 'DOUBLE', value: cost},
-                        {name: 'MODEL', type: 'STRING', value: req.body.model},
-                        {name: 'TYPE', type: 'ID', enumName: 'PC_TYPE', code: pcTypeCode},
-                        {name: 'SELFBUILT', type: 'BOOLEAN', value: selfBuilt}
+  //Grab updated policy params from request body and attach serials
+  var newPolicyParams = {data: {policyParameterValues: [
+                        {name: 'PC_SERIAL', type: 'STRING', value: pcSerial, serial: ppSerial[2].serial},
+                        {name: 'INDIVIDUAL_PARTS_COVER', type: 'BOOLEAN', value: individualParts, serial: ppSerial[3].serial},
+                        {name: 'DATE_OF_PURCHASE', type: 'DATE', value: date, serial: ppSerial[4].serial},
+                        {name: 'COST', type: 'DOUBLE', value: cost, serial: ppSerial[5].serial},
+                        {name: 'MODEL', type: 'STRING', value: req.body.model, serial: ppSerial[6].serial},
+                        {name: 'TYPE', type: 'ID', enumName: 'PC_TYPE', code: pcTypeCode, serial: ppSerial[7].serial},
+                        {name: 'SELFBUILT', type: 'BOOLEAN', value: selfBuilt, serial: ppSerial[8].serial}
                         ]}
                         };
 

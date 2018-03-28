@@ -3,18 +3,70 @@ import Header from './Header.js';
 import InfoForm from './InfoForm.js';
 import InfoFormHeader from './InfoFormHeader.js';
 import Footer from './Footer.js';
+import MessageModal from './MessageModal.js'
 import axios from 'axios';
 
 class ItcApp extends React.Component {
     state = {
         calculatedOnce: false,
         ethPrice: 0,
-        policySerial: ''
+        policySerial: '',
+        policyParams: [],
+        messages: undefined
     }
+
+    //Validation handler
+    handleValidation = (name, address, cpr, email, cost, model, pcSerial) => {
+
+        var messages = [];
+
+                //Do validation of input fields
+                if(!name){
+                    messages.push('Name');
+                }
+        
+                if(!address){
+                    messages.push('Address');
+                }
+        
+                if(!cpr){
+                    messages.push('Cpr');
+                }
+        
+                if(!email){
+                    messages.push('Email');
+                }
+        
+                if(!cost){
+                    messages.push('Cost');
+                }
+        
+                if(!model){
+                    messages.push('Model');
+                }
+        
+                if(!pcSerial){
+                    messages.push('PC Serial');
+                }
+
+        return messages;
+
+    } 
+
+    handleMessageClear = () => {
+        this.setState(() => ({
+            messages: undefined
+        }));
+    }
+
 
     handleCalculate = (name, address, cpr, email, type, cost, model, pcSerial, individualParts, selfBuilt) => {
 
-
+        var validationMessages = this.handleValidation(name, address, cpr, email, cost, model, pcSerial);
+        
+        //If validation succeeds
+        if(validationMessages.length == 0)
+        {
         //Handle customer and policy creation on first calc
         if(this.state.calculatedOnce === false)
         {
@@ -41,16 +93,12 @@ class ItcApp extends React.Component {
                 }).then((response) => {
 
                     var policySerial = response.data.serial;
+                    var policyParamArray = response.data.policyParameterValues;
 
                     console.log(response);
                     axios.put('calculatePolicy', {
                         policySerial: policySerial,
-                        type: type,
-                        cost: cost,
-                        model: model,
-                        pcSerial: pcSerial,
-                        individualParts: individualParts,
-                        selfBuilt: selfBuilt
+                        policyParams: policyParamArray
                     }).then((response) => {
                         console.log(response);
                         var PREMIUM_ETH = response.data.policyParameterValues.find((element) => {
@@ -60,7 +108,8 @@ class ItcApp extends React.Component {
                         this.setState(() => ({
                             ethPrice: PREMIUM_ETH.value,
                             calculatedOnce: true,
-                            policySerial: policySerial
+                            policySerial: policySerial,
+                            policyParams: policyParamArray
                         }));
                         console.log('Value of this.state.ethPrice: ' + this.state.ethPrice);
                     }).catch((error) => {
@@ -76,9 +125,10 @@ class ItcApp extends React.Component {
           });
           
         } else {
-            console.log("Doing subsequent calculate with value: " + this.state.policySerial);
+            console.log("Doing subsequent calculate on policy: " + this.state.policySerial);
             axios.put('calculatePolicy', {
                 policySerial: this.state.policySerial,
+                policyParams: this.state.policyParams,
                 type: type,
                 cost: cost,
                 model: model,
@@ -99,12 +149,21 @@ class ItcApp extends React.Component {
                 console.log(error);
             });
         }
+
+    } 
+    //If validation fails
+    else {
+        this.setState(() => ({
+            messages: validationMessages
+        }));
+    }
+
     };
 
     render() {
         return (
             <div className="verticalDiv">
-            <Header />
+            <Header headerTitle='Insurance through Cryptocurrency'/>
             <div className="container">
             <div>
             <InfoFormHeader />
@@ -114,6 +173,10 @@ class ItcApp extends React.Component {
             <div className="phantomDiv">
             <Footer />
             </div>
+            <MessageModal 
+            messages={this.state.messages}
+            handleMessageClear={this.handleMessageClear}
+            />
             </div>
         )
     }
