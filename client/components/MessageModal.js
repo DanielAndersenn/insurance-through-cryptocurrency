@@ -15,7 +15,7 @@ class MessageModal extends React.Component {
             onRequestClose={this.props.handleMessageClear}
             >
             {console.log(this.props.messages)}
-            <h3 className="modal__title">Please fill out fields:</h3>
+            <h3 className="modal__title">{this.props.modalTitle}</h3>
             {this.props.messages && this.props.messages.map((message, index) => {
                 return <div key={index}>{message}</div>
             })}

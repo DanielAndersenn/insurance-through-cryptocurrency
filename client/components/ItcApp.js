@@ -1,19 +1,66 @@
 import React from 'react';
+import axios from 'axios';
+import Web3 from 'web3';
+import promisify from 'util.promisify';
 import Header from './Header.js';
 import InfoForm from './InfoForm.js';
 import InfoFormHeader from './InfoFormHeader.js';
 import Footer from './Footer.js';
-import MessageModal from './MessageModal.js'
-import axios from 'axios';
+import MessageModal from './MessageModal.js';
 
 class ItcApp extends React.Component {
+    constructor(props) {
+        super(props);
+
+        //Init web3 for interacting with Ethereum
+        //Detect source for ethereum node. This project will always load in web3 from Metamask
+        if(typeof web3 != 'undefined'){
+            console.log("Using web3 detected from external source like Metamask");
+            this.web3 = new Web3(web3.currentProvider);
+            console.log('Version of web3: ' + this.web3.version.api);
+        }else{
+            this.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        }
+
+    }
     state = {
         calculatedOnce: false,
         ethPrice: 0,
         policySerial: '',
         policyParams: [],
-        messages: undefined
+        messages: undefined,
+        modalTitle: ''
     }
+
+    
+    handleBuy = async () => {
+        console.log('was called');
+        const account = this.web3.eth.accounts[0];
+        const sendTransaction = promisify(this.web3.eth.sendTransaction);
+        const danandInsureAddress = '0x9F7F968bD55Fb37cDB5209A84c18bbF48Ef3C604';
+        console.log('Value of value: ' + this.web3.toWei(1, 'ether'));
+        
+        const address = await sendTransaction({
+            from: account,
+            to: danandInsureAddress,
+            value: web3.toWei(this.state.ethPrice, 'ether')
+        }).then((result) => {
+            console.log('Transaction ID: ' + result);
+
+            var transactionLink = 'https://ropsten.etherscan.io/tx/' + result;
+
+            //Writing response to modal
+            this.setState(() => ({
+                modalTitle: 'Transaction confirmation',
+                messages: [["Click ", <a href={transactionLink} target="_blank" className="link">here</a>, " to see your transaction."]]
+            }));
+        }).catch((error) => {
+            console.log(error);
+        });
+        
+        
+        console.log("Value of account: " + account);
+    };
 
     //Validation handler
     handleValidation = (name, address, cpr, email, cost, model, pcSerial) => {
@@ -55,7 +102,8 @@ class ItcApp extends React.Component {
 
     handleMessageClear = () => {
         this.setState(() => ({
-            messages: undefined
+            messages: undefined,
+            modalTitle: ''
         }));
     }
 
@@ -154,6 +202,7 @@ class ItcApp extends React.Component {
     //If validation fails
     else {
         this.setState(() => ({
+            modalTitle: 'Please fill out fields',
             messages: validationMessages
         }));
     }
@@ -168,12 +217,13 @@ class ItcApp extends React.Component {
             <div>
             <InfoFormHeader />
             </div>
-            <InfoForm ethPrice={this.state.ethPrice} handleCalculate={this.handleCalculate}/>
+            <InfoForm ethPrice={this.state.ethPrice} handleCalculate={this.handleCalculate} handleBuy={this.handleBuy}/>
             </div>
             <div className="phantomDiv">
             <Footer />
             </div>
-            <MessageModal 
+            <MessageModal
+            modalTitle={this.state.modalTitle} 
             messages={this.state.messages}
             handleMessageClear={this.handleMessageClear}
             />

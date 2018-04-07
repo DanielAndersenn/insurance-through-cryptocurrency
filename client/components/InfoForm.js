@@ -24,6 +24,11 @@ export default class InfoForm extends React.Component {
 
     };
 
+    handleBuy = (event) => {
+        event.preventDefault();
+        this.props.handleBuy();
+    }
+
     render() {
         return (
             <div>
@@ -57,7 +62,7 @@ export default class InfoForm extends React.Component {
             </table>
             <div className="price-div">Price: {this.props.ethPrice} ETH</div>
             <button className="calc-button">Calculate</button>
-            <button className="buy-button">Buy</button>
+            <button className="buy-button" onClick={this.handleBuy}>Buy</button>
             </form>
             </div>
 

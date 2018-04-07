@@ -7,6 +7,8 @@ const winston = require('winston');
 const ibsuite = require('./interfaces/ibsuite');
 const path = require('path');
 const publicPath = path.join(__dirname, 'client', 'public');
+const Web3 = require('web3');
+var web3;
 
 var {Customer} = require('./models/iba_customer_model');
 var {Policy} = require('./models/iba_policy_model');
@@ -20,6 +22,14 @@ app.use(bodyParser.json());
 app.get('*', (req, res) => {
     res.sendFile(path.join(publicPath, 'index.html'));
   });
+
+  //Detect source for ethereum node. This project will always load in web3 from Metamask
+  if(typeof web3 != 'undefined'){
+    console.log("Using web3 detected from external source like Metamask");
+    this.web3 = new Web3(web3.currentProvider);
+  }else{
+    this.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+  }
 
 app.post('/customer', (req, res) => {
   winston.log('info', '/customer endpoint Started');
@@ -146,6 +156,8 @@ app.put('/calculatePolicy', (req, res) => {
 
 app.listen(port, () => {
   winston.log('info', `Started up server.js on port ${port}`);
+  winston.log('info', Web3.version);
+  winston.log('info', web3);
 });
 
 module.exports = {app};
