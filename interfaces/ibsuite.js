@@ -115,7 +115,7 @@ var calculatePolicy = (polSerial, policyParams) => {
   });
 }
 
-var activateCollectPayPolicy = (polSerial) => {
+var activateCollectPayPolicy = (polSerial,transactionTimestamp, transactionLink) => {
   return new Promise((resolve, reject) => {
 
   winston.log('info', 'begin activateCollectPayPolicy');
@@ -126,7 +126,7 @@ var activateCollectPayPolicy = (polSerial) => {
     headers: generateAuthHeader(),
     url: 'https://101danand.ibapps.dk/101danand/rest/v1/json/callJSON?operation=activateCollectPayPolicy',
     method: 'PUT',
-    body: '{"policySerial": "' + polSerial + '"}'
+    body: '{"policySerial": "' + polSerial + '", "transactionLink": "' + transactionLink + '", "transactionDate": "' + transactionTimestamp + '"}'
   }, (error, response, body) => {
       winston.log('info', 'Value of error: ' + error);
       winston.log('info', 'Value of response: ' + response);
@@ -139,7 +139,7 @@ var activateCollectPayPolicy = (polSerial) => {
       if(body && statusCode == '200')
       {
         resultObj = JSON.parse(body);
-        winston.log('info', "Policy activated: " + resultObj);
+        winston.log('info', "Policy activated, collected and paid: " + resultObj);
         resolve(resultObj);
       } else {
         resultObj = JSON.parse(body);

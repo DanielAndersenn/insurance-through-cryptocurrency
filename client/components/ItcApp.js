@@ -34,7 +34,7 @@ class ItcApp extends React.Component {
 
     
     handleBuy = async () => {
-        console.log('was called');
+        console.log('handldBuy() begin');
         const account = this.web3.eth.accounts[0];
         const sendTransaction = promisify(this.web3.eth.sendTransaction);
         const danandInsureAddress = '0x9F7F968bD55Fb37cDB5209A84c18bbF48Ef3C604';
@@ -48,7 +48,19 @@ class ItcApp extends React.Component {
             console.log('Transaction ID: ' + result);
 
             var transactionLink = 'https://ropsten.etherscan.io/tx/' + result;
+            var polSerial = this.state.policySerial;
+            var transactionTimestamp = new Date();
 
+            //Initiate activeColletPay function in IBSuite to process payment info
+            axios.put('payPolicy', {
+                transactionLink: transactionLink,
+                polSerial: polSerial,
+                transactionTimestamp: transactionTimestamp
+              }).then((response) => {
+              //Handle response 
+              console.log("Value of response from payPolicy: " + response);
+              
+              });
             //Writing response to modal
             this.setState(() => ({
                 modalTitle: 'Transaction confirmation',
@@ -59,7 +71,7 @@ class ItcApp extends React.Component {
         });
         
         
-        console.log("Value of account: " + account);
+        console.log('handleBuy() end');
     };
 
     //Validation handler
