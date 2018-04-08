@@ -8,7 +8,7 @@
     "client": "cd client && yarn run dev-build",
     "server": "nodemon server.js",
     "dev": "concurrently --kill-others-on-fail \"yarn client\" \"yarn server\"",
-    "production": "cd client && yarn run build && cd .. && yarn run server"
+    "production": "git pull && cd client && yarn run build && cd .. && yarn run server"
   },
   "dependencies": {
     "body-parser": "^1.15.2",

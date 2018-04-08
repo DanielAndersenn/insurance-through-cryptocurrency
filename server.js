@@ -20,15 +20,7 @@ app.use(bodyParser.json());
 app.get('*', (req, res) => {
     res.sendFile(path.join(publicPath, 'index.html'));
   });
-
-  //Detect source for ethereum node. This project will always load in web3 from Metamask
-  if(typeof web3 != 'undefined'){
-    console.log("Using web3 detected from external source like Metamask");
-    this.web3 = new Web3(web3.currentProvider);
-  }else{
-    this.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-  }
-
+  
 app.post('/customer', (req, res) => {
   winston.log('info', '/customer endpoint Started');
 
