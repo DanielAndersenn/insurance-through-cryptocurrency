@@ -7,8 +7,9 @@
   "scripts": {
     "client": "cd client && yarn run dev-build",
     "server": "nodemon server.js",
+    "prod-server": "forever start --minUptime 1000 --spinSleepTime 1000 server.js",
     "dev": "concurrently --kill-others-on-fail \"yarn client\" \"yarn server\"",
-    "production": "git pull && cd client && yarn run build && cd .. && yarn run server"
+    "production": "git pull && cd client && yarn run build && cd .. && yarn run prod-server"
   },
   "dependencies": {
     "body-parser": "^1.15.2",
