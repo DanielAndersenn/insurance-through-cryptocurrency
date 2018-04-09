@@ -62,7 +62,7 @@ export default class InfoForm extends React.Component {
             </table>
             <div className="price-div">Price: {this.props.ethPrice} ETH</div>
             <button className="calc-button">Calculate</button>
-            <button className="buy-button" onClick={this.handleBuy}>Buy</button>
+            <button disabled={this.props.calculatedOnce} className="buy-button" onClick={this.handleBuy}>Buy</button>
             </form>
             </div>
 

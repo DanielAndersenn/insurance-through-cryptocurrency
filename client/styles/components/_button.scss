@@ -24,6 +24,11 @@
     -moz-border-radius: 3px;
 }
 
+.buy-button:disabled {
+    background: grey;
+    color: black;
+}
+
 .button-small {
     margin: 20px 0px 0px 0px;
     width: 15rem;

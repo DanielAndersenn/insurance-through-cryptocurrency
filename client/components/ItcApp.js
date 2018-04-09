@@ -11,17 +11,6 @@ import MessageModal from './MessageModal.js';
 class ItcApp extends React.Component {
     constructor(props) {
         super(props);
-
-        //Init web3 for interacting with Ethereum
-        //Detect source for ethereum node. This project will always load in web3 from Metamask
-        if(typeof web3 != 'undefined'){
-            console.log("Using web3 detected from external source like Metamask");
-            this.web3 = new Web3(web3.currentProvider);
-            console.log('Version of web3: ' + this.web3.version.api);
-        }else{
-            this.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-        }
-
     }
     state = {
         calculatedOnce: false,
@@ -29,13 +18,48 @@ class ItcApp extends React.Component {
         policySerial: '',
         policyParams: [],
         messages: undefined,
-        modalTitle: ''
+        modalTitle: '',
+        metaMask: true
     }
 
+    componentDidMount() {
+        //Init web3 for interacting with Ethereum
+        //Detect source for ethereum node. This project will always load in web3 from Metamask
+        if(typeof web3 != 'undefined'){
+            console.log("Using web3 detected from external source Metamask");
+            this.web3 = new Web3(web3.currentProvider);
+            console.log('Version of web3: ' + this.web3.version.api);
+        }else{
+            this.setState(() => ({
+                metaMask: false
+            }));
+        }
+    };
     
     handleBuy = async () => {
-        console.log('handldBuy() begin');
+        console.log('handledBuy() begin');
+
+        //Validate extension is installed
+        if(this.state.metaMask === false) {
+            this.setState(() => ({
+                modalTitle: 'Missing MetaMask extension',
+                messages: ["To buy the policy you need the MetaMask extension for Chrome installed!", 
+                ["Go ", <a key="howToLink" href='/help' target="_blank" className="link">here</a>, " for a guide on how to use the site."]]
+            }));
+        } else {
+        
+        //Try to retrieve users MetaMask account
         const account = this.web3.eth.accounts[0];
+        
+        //Validate user is logged in to MetaMask account
+        if(account === undefined) {
+            this.setState(() => ({
+                modalTitle: 'Not logged into MetaMask',
+                messages: ["To buy the policy you need to login to your MetaMask account!", 
+                ["Go ", <a key="howToLink" href='/help' target="_blank" className="link">here</a>, " for a guide on how to use the site."]]
+            }));
+        } else {
+
         const sendTransaction = promisify(this.web3.eth.sendTransaction);
         const danandInsureAddress = '0x9F7F968bD55Fb37cDB5209A84c18bbF48Ef3C604';
         console.log('Value of value: ' + this.web3.toWei(1, 'ether'));
@@ -51,7 +75,7 @@ class ItcApp extends React.Component {
             var polSerial = this.state.policySerial;
             var transactionTimestamp = new Date();
 
-            //Initiate activeColletPay function in IBSuite to process payment info
+            //Initiate activeCollectPay function in IBSuite to process payment info
             axios.put('payPolicy', {
                 transactionLink: transactionLink,
                 polSerial: polSerial,
@@ -64,11 +88,16 @@ class ItcApp extends React.Component {
             //Writing response to modal
             this.setState(() => ({
                 modalTitle: 'Transaction confirmation',
-                messages: [["Click ", <a href={transactionLink} target="_blank" className="link">here</a>, " to see your transaction."]]
+                messages: [["Click ", <a key="howToLink" href={transactionLink} target="_blank" className="link">here</a>, " to see your transaction."]]
             }));
         }).catch((error) => {
             console.log(error);
         });
+
+        //end MetaMask account validation else
+        }
+        //end MetaMask extension installed validation else
+        }
         
         
         console.log('handleBuy() end');
@@ -229,7 +258,11 @@ class ItcApp extends React.Component {
             <div>
             <InfoFormHeader />
             </div>
-            <InfoForm ethPrice={this.state.ethPrice} handleCalculate={this.handleCalculate} handleBuy={this.handleBuy}/>
+            <InfoForm 
+                ethPrice={this.state.ethPrice} 
+                handleCalculate={this.handleCalculate} 
+                handleBuy={this.handleBuy}
+                calculatedOnce={this.state.calculatedOnce}/>
             </div>
             <div className="phantomDiv">
             <Footer />

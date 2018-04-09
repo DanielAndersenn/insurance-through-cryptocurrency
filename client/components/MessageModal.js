@@ -9,9 +9,9 @@ class MessageModal extends React.Component {
     return (
         <Modal
             isOpen={!!this.props.messages}
-            contentLabel="Selected option"
             closeTimeoutMS={200}
             className="modal"
+            contentLabel="msgModal"
             onRequestClose={this.props.handleMessageClear}
             >
             {console.log(this.props.messages)}
