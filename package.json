@@ -21,6 +21,7 @@
     "winston": "2.4.0"
   },
   "devDependencies": {
+    "babel-plugin-dynamic-import-node": "^1.2.0",
     "concurrently": "^3.5.0"
   }
 }

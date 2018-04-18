@@ -39,6 +39,16 @@ class ItcApp extends React.Component {
     handleBuy = async () => {
         console.log('handledBuy() begin');
 
+        //Reload web3 if user has needed to install it
+        if(typeof web3 != 'undefined'){
+            console.log("Using web3 detected from external source Metamask");
+            this.web3 = new Web3(web3.currentProvider);
+            console.log('Version of web3: ' + this.web3.version.api);
+            this.setState(() => ({
+                metaMask: true
+            }));
+        }
+
         //Validate extension is installed
         if(this.state.metaMask === false) {
             this.setState(() => ({
