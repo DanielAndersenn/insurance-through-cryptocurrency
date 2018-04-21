@@ -21,7 +21,7 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(publicPath, 'index.html'));
   });
   
-app.post('/customer', (req, res) => {
+app.post('/api/customer', (req, res) => {
   winston.log('info', '/customer endpoint Started');
 
   //Grab relevant parameters from body of request
@@ -47,7 +47,7 @@ app.post('/customer', (req, res) => {
 
 });
 
-app.post('/policy', (req, res) => {
+app.post('/api/policy', (req, res) => {
   winston.log('info', '/policy endpoint Started');
 
   winston.log('info', 'Value of req.body.selfBuilt: ' + req.body.selfBuilt);
@@ -100,7 +100,7 @@ app.post('/policy', (req, res) => {
 
 });
 
-app.put('/calculatePolicy', (req, res) => {
+app.put('/api/calculatePolicy', (req, res) => {
 
   winston.log('info', '/calculatePolicy endpoint Started');
 
@@ -144,7 +144,7 @@ app.put('/calculatePolicy', (req, res) => {
 
 });
 
-app.put('/payPolicy', (req, res) => {
+app.put('/api/payPolicy', (req, res) => {
 
   winston.log('info', '/payPolicy endpoint Started');
 

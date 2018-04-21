@@ -15,6 +15,7 @@ class ItcApp extends React.Component {
     state = {
         calculatedOnce: false,
         ethPrice: 0,
+        krPrice: 0,
         policySerial: '',
         policyParams: [],
         messages: undefined,
@@ -39,16 +40,6 @@ class ItcApp extends React.Component {
     handleBuy = async () => {
         console.log('handledBuy() begin');
 
-        //Reload web3 if user has needed to install it
-        if(typeof web3 != 'undefined'){
-            console.log("Using web3 detected from external source Metamask");
-            this.web3 = new Web3(web3.currentProvider);
-            console.log('Version of web3: ' + this.web3.version.api);
-            this.setState(() => ({
-                metaMask: true
-            }));
-        }
-
         //Validate extension is installed
         if(this.state.metaMask === false) {
             this.setState(() => ({
@@ -58,7 +49,7 @@ class ItcApp extends React.Component {
             }));
         } else {
         
-        //Try to retrieve users MetaMask account
+        //Retrieve users MetaMask account
         const account = this.web3.eth.accounts[0];
         
         //Validate user is logged in to MetaMask account
@@ -85,8 +76,8 @@ class ItcApp extends React.Component {
             var polSerial = this.state.policySerial;
             var transactionTimestamp = new Date();
 
-            //Initiate activeCollectPay function in IBSuite to process payment info
-            axios.put('payPolicy', {
+            //Initiate activeCollectPay function in IBSuite to process payment info and move policy through its lifecycle
+            axios.put('api/payPolicy', {
                 transactionLink: transactionLink,
                 polSerial: polSerial,
                 transactionTimestamp: transactionTimestamp
@@ -171,7 +162,7 @@ class ItcApp extends React.Component {
         {
           
           console.log("Doing customer and policy creation then calculate");
-          axios.post('customer', {
+          axios.post('api/customer', {
             name: name,
             address: address,
             cpr: cpr,
@@ -181,7 +172,7 @@ class ItcApp extends React.Component {
           console.log(response);
             if(response.status === 200)
             {
-                axios.post('policy', {
+                axios.post('api/policy', {
                     type: type,
                     cost: cost,
                     model: model,
@@ -195,7 +186,7 @@ class ItcApp extends React.Component {
                     var policyParamArray = response.data.policyParameterValues;
 
                     console.log(response);
-                    axios.put('calculatePolicy', {
+                    axios.put('api/calculatePolicy', {
                         policySerial: policySerial,
                         policyParams: policyParamArray
                     }).then((response) => {
@@ -204,8 +195,13 @@ class ItcApp extends React.Component {
                             return element.name === 'PREMIUM_ETH';
                         });
 
+                        var PREMIUM_KR =  response.data.policyParameterValues.find((element) => {
+                            return element.name === 'PREMIUM_KR';
+                        });
+
                         this.setState(() => ({
                             ethPrice: PREMIUM_ETH.value,
+                            krPrice: PREMIUM_KR.value,
                             calculatedOnce: true,
                             policySerial: policySerial,
                             policyParams: policyParamArray
@@ -225,7 +221,7 @@ class ItcApp extends React.Component {
           
         } else {
             console.log("Doing subsequent calculate on policy: " + this.state.policySerial);
-            axios.put('calculatePolicy', {
+            axios.put('api/calculatePolicy', {
                 policySerial: this.state.policySerial,
                 policyParams: this.state.policyParams,
                 type: type,
@@ -269,7 +265,8 @@ class ItcApp extends React.Component {
             <InfoFormHeader />
             </div>
             <InfoForm 
-                ethPrice={this.state.ethPrice} 
+                ethPrice={this.state.ethPrice}
+                krPrice={this.state.krPrice}
                 handleCalculate={this.handleCalculate} 
                 handleBuy={this.handleBuy}
                 calculatedOnce={this.state.calculatedOnce}/>
