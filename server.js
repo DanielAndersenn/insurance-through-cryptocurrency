@@ -6,13 +6,13 @@ const bodyParser = require('body-parser');
 const winston = require('winston');
 const ibsuite = require('./interfaces/ibsuite');
 const path = require('path');
-const publicPath = path.join(__dirname, 'client', 'public');
 
 var {Customer} = require('./models/iba_customer_model');
 var {Policy} = require('./models/iba_policy_model');
 
 var app = express();
 const port = process.env.PORT;
+const publicPath = path.join(__dirname, 'client', 'public');
 
 app.use('/', express.static(publicPath));
 app.use(bodyParser.json());
@@ -43,7 +43,6 @@ app.post('/api/customer', (req, res) => {
     winston.log('info', 'Received error response from IBSuite');
     res.send(error);
   });
-
 
 });
 
@@ -80,7 +79,6 @@ app.post('/api/policy', (req, res) => {
     policyContractPeriod: {enumName: 'POLICY_CONTRACT_PERIOD', code: '12'},
     policyParameterValues: [{name: 'PC_SERIAL', type: 'STRING', value: pcSerial},
                             {name: 'INDIVIDUAL_PARTS_COVER', type: 'BOOLEAN', value: individualParts},
-                            {name: 'DATE_OF_PURCHASE', type: 'DATE', value: date},
                             {name: 'COST', type: 'DOUBLE', value: cost},
                             {name: 'MODEL', type: 'STRING', value: req.body.model},
                             {name: 'TYPE', type: 'ID', enumName: 'PC_TYPE', code: pcTypeCode},
@@ -109,9 +107,6 @@ app.put('/api/calculatePolicy', (req, res) => {
 
   var ppSerial = req.body.policyParams;
 
-  winston.log('info', 'Value of ppSerial[2].serial: ' + ppSerial[2].serial);
-
-  var date = new Date().toJSON();
   var pcTypeCode = (req.body.type === "Desktop") ? '1': '2';
   var cost = Number(req.body.cost);
   var selfBuilt = req.body.selfBuilt;
@@ -120,13 +115,12 @@ app.put('/api/calculatePolicy', (req, res) => {
 
   //Grab updated policy params from request body and attach serials
   var newPolicyParams = {data: {policyParameterValues: [
-                        {name: 'PC_SERIAL', type: 'STRING', value: pcSerial, serial: ppSerial[4].serial},
-                        {name: 'INDIVIDUAL_PARTS_COVER', type: 'BOOLEAN', value: individualParts, serial: ppSerial[5].serial},
-                        {name: 'DATE_OF_PURCHASE', type: 'DATE', value: date, serial: ppSerial[6].serial},
-                        {name: 'COST', type: 'DOUBLE', value: cost, serial: ppSerial[7].serial},
-                        {name: 'MODEL', type: 'STRING', value: req.body.model, serial: ppSerial[8].serial},
-                        {name: 'TYPE', type: 'ID', enumName: 'PC_TYPE', code: pcTypeCode, serial: ppSerial[9].serial},
-                        {name: 'SELFBUILT', type: 'BOOLEAN', value: selfBuilt, serial: ppSerial[10].serial},
+                        {name: 'PC_SERIAL', type: 'STRING', value: pcSerial, serial: ppSerial[3].serial},
+                        {name: 'INDIVIDUAL_PARTS_COVER', type: 'BOOLEAN', value: individualParts, serial: ppSerial[4].serial},
+                        {name: 'COST', type: 'DOUBLE', value: cost, serial: ppSerial[5].serial},
+                        {name: 'MODEL', type: 'STRING', value: req.body.model, serial: ppSerial[6].serial},
+                        {name: 'TYPE', type: 'ID', enumName: 'PC_TYPE', code: pcTypeCode, serial: ppSerial[7].serial},
+                        {name: 'SELFBUILT', type: 'BOOLEAN', value: selfBuilt, serial: ppSerial[8].serial},
                         ]}
                         };
 
@@ -148,7 +142,7 @@ app.put('/api/payPolicy', (req, res) => {
 
   winston.log('info', '/payPolicy endpoint Started');
 
-  var result = ibsuite.activateCollectPayPolicy(req.body.polSerial, req.body.transactionTimestamp, req.body.transactionLink);
+  var result = ibsuite.activateCollectPayPolicy(req.body.polSerial, req.body.transactionLink);
 
   result.then((result) => {
     winston.log('info', 'Received success response from IBSuite');

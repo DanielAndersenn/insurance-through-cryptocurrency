@@ -32,25 +32,16 @@ class ItcApp extends React.Component {
             console.log('Version of web3: ' + this.web3.version.api);
         }else{
             this.setState(() => ({
+                modalTitle: 'Missing MetaMask extension',
+                messages: ["This website only works with the browser extension MetaMask installed. ", 
+                ["Go ", <a key="howToLink" href='/help' target="_blank" className="link">here</a>, " for a guide on how to use the site."]],
                 metaMask: false
             }));
         }
     };
     
     handleBuy = async () => {
-        console.log('handledBuy() begin');
-
-        //Validate extension is installed
-        if(this.state.metaMask === false) {
-            this.setState(() => ({
-                modalTitle: 'Missing MetaMask extension',
-                messages: ["To buy the policy you need the MetaMask extension for Chrome installed!", 
-                ["Go ", <a key="howToLink" href='/help' target="_blank" className="link">here</a>, " for a guide on how to use the site."]]
-            }));
-        } else {
-        
-        //Retrieve users MetaMask account
-        const account = this.web3.eth.accounts[0];
+        console.log('handleBuy() begin');        
         
         //Validate user is logged in to MetaMask account
         if(account === undefined) {
@@ -60,6 +51,8 @@ class ItcApp extends React.Component {
                 ["Go ", <a key="howToLink" href='/help' target="_blank" className="link">here</a>, " for a guide on how to use the site."]]
             }));
         } else {
+
+        const account = this.web3.eth.accounts[0];
 
         const sendTransaction = promisify(this.web3.eth.sendTransaction);
         const danandInsureAddress = '0x9F7F968bD55Fb37cDB5209A84c18bbF48Ef3C604';
@@ -74,13 +67,11 @@ class ItcApp extends React.Component {
 
             var transactionLink = 'https://ropsten.etherscan.io/tx/' + result;
             var polSerial = this.state.policySerial;
-            var transactionTimestamp = new Date();
 
             //Initiate activeCollectPay function in IBSuite to process payment info and move policy through its lifecycle
             axios.put('api/payPolicy', {
                 transactionLink: transactionLink,
-                polSerial: polSerial,
-                transactionTimestamp: transactionTimestamp
+                polSerial: polSerial
               }).then((response) => {
               //Handle response 
               console.log("Value of response from payPolicy: " + response);
@@ -96,8 +87,6 @@ class ItcApp extends React.Component {
         });
 
         //end MetaMask account validation else
-        }
-        //end MetaMask extension installed validation else
         }
         
         
@@ -236,7 +225,12 @@ class ItcApp extends React.Component {
                     return element.name === 'PREMIUM_ETH';
                 });
 
+                var PREMIUM_KR =  response.data.policyParameterValues.find((element) => {
+                    return element.name === 'PREMIUM_KR';
+                });
+
                 this.setState(() => ({
+                    krPrice: PREMIUM_KR.value,
                     ethPrice: PREMIUM_ETH.value
                 }));
                 console.log('Value of this.state.ethPrice: ' + this.state.ethPrice);
