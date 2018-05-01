@@ -1,8 +1,8 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\Daniel Andersen\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js run dev
+  C:\Program Files\nodejs\node.exe C:\Users\Daniel Andersen\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js client
 
 PATH: 
-  %SystemRoot%\system32\WindowsPowerShell\v1.0\;C:\ProgramData\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Microsoft Network Monitor 3\;C:\Program Files (x86)\Livestreamer;C:\Program Files (x86)\Streamlink\bin;C:\Program Files\PuTTY\;C:\Android;C:\Program Files (x86)\Skype\Phone\;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\Users\Daniel Andersen\AppData\Roaming\npm;C:\Users\Daniel Andersen\AppData\Local\atom\bin;C:\Program Files\Heroku\bin;C:\Program Files\Microsoft VS Code\bin
+  C:\Program Files\nodejs\node_modules\npm\node_modules\npm-lifecycle\node-gyp-bin;C:\Users\Daniel Andersen\Desktop\React\insurance-through-cryptocurrency\node_modules\.bin;%SystemRoot%\system32\WindowsPowerShell\v1.0\;C:\ProgramData\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Microsoft Network Monitor 3\;C:\Program Files (x86)\Livestreamer;C:\Program Files (x86)\Streamlink\bin;C:\Program Files\PuTTY\;C:\Android;C:\Program Files (x86)\Skype\Phone\;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\Program Files (x86)\Windows Kits\8.1\Windows Performance Toolkit\;C:\Users\Daniel Andersen\AppData\Roaming\npm;C:\Users\Daniel Andersen\AppData\Local\atom\bin;C:\Program Files\Heroku\bin;C:\Program Files\Microsoft VS Code\bin
 
 Yarn version: 
   1.5.1
@@ -21,9 +21,11 @@ npm manifest:
     "author": "Daniel Andersen",
     "license": "MIT",
     "scripts": {
-      "client": "cd client && yarn run build",
+      "client": "cd client && yarn run dev-build",
       "server": "nodemon server.js",
-      "dev": "concurrently --kill-others-on-fail \"yarn client\" \"yarn server\""
+      "prod-server": "forever start --minUptime 1000 --spinSleepTime 1000 server.js",
+      "dev": "concurrently --kill-others-on-fail \"yarn client\" \"yarn server\"",
+      "production": "git stash && git pull && cd client && yarn run build && cd .. && yarn run prod-server"
     },
     "dependencies": {
       "body-parser": "^1.15.2",
@@ -32,10 +34,10 @@ npm manifest:
       "mongoose": "4.5.9",
       "request": "^2.83.0",
       "validator": "^9.4.1",
-      "web3": "^1.0.0-beta.33",
       "winston": "2.4.0"
     },
     "devDependencies": {
+      "babel-plugin-dynamic-import-node": "^1.2.0",
       "concurrently": "^3.5.0"
     }
   }
@@ -5729,7 +5731,7 @@ Trace:
   Error: Command failed.
   Exit code: 1
   Command: C:\Windows\system32\cmd.exe
-  Arguments: /d /s /c concurrently --kill-others-on-fail "yarn client" "yarn server"
+  Arguments: /d /s /c cd client && yarn run dev-build
   Directory: C:\Users\Daniel Andersen\Desktop\React\insurance-through-cryptocurrency
   Output:
   
