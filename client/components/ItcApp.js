@@ -117,6 +117,8 @@ class ItcApp extends React.Component {
         
                 if(!cost){
                     messages.push('Cost');
+                } else if(Number(cost) > 100000) {
+                    messages.push('Cost of insured PC may not exceed 100.000 kr.')
                 }
         
                 if(!model){
@@ -243,7 +245,7 @@ class ItcApp extends React.Component {
     //If validation fails
     else {
         this.setState(() => ({
-            modalTitle: 'Please fill out fields',
+            modalTitle: 'Validation of input fields failed',
             messages: validationMessages
         }));
     }

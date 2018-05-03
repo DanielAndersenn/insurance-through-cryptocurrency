@@ -22,6 +22,8 @@
   },
   "devDependencies": {
     "babel-plugin-dynamic-import-node": "^1.2.0",
-    "concurrently": "^3.5.0"
+    "concurrently": "^3.5.0",
+    "yarn": "^1.6.0",
+    "nodemon": "^1.17.3"
   }
 }
