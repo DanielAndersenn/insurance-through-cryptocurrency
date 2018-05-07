@@ -41,7 +41,9 @@ class ItcApp extends React.Component {
     };
     
     handleBuy = async () => {
-        console.log('handleBuy() begin');        
+        console.log('handleBuy() begin');
+
+        const account = this.web3.eth.accounts[0];
         
         //Validate user is logged in to MetaMask account
         if(account === undefined) {
@@ -51,8 +53,6 @@ class ItcApp extends React.Component {
                 ["Go ", <a key="howToLink" href='/help' target="_blank" className="link">here</a>, " for a guide on how to use the site."]]
             }));
         } else {
-
-        const account = this.web3.eth.accounts[0];
 
         const sendTransaction = promisify(this.web3.eth.sendTransaction);
         const danandInsureAddress = '0x9F7F968bD55Fb37cDB5209A84c18bbF48Ef3C604';
